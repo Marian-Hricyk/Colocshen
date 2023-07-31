@@ -1,16 +1,16 @@
-public class MyHashMap<T> {
+public class MyHashMap<K, V> {
     private Node[] nodes;
     private int size;
     private static final int DEFAULT_CAPACITY = 16;
     private static final Object NULL_CEY = new Object();
 
 
-    private class Node<T> {
-        T key;
-        T value;
-        Node<T> next;
+    private class Node<K,V> {
+        K key;
+        V value;
+        Node next;
 
-        public Node(T key, T value) {
+        public Node(K key, V value) {
             this.key = key;
             this.value = value;
             next = null;
@@ -26,9 +26,9 @@ public class MyHashMap<T> {
         size = 0;
     }
 
-    public void put(T key, T value) {
+    public void put(K key, V value) {
         if (key == null) {
-            key = (T) NULL_CEY;
+            key = (K) NULL_CEY;
         }
         int index = getIndex(key);
         getAdd(index, key, value, nodes);
@@ -46,13 +46,13 @@ public class MyHashMap<T> {
         int index;
 
         for (int i = 0; i < nodes.length; i++) {
-            index = getIndex((T) nodes[i].key);
-            getAdd(index, (T) nodes[i].key, (T) nodes[i].value, newNodes);
+            index = getIndex((K) nodes[i].key);
+            getAdd(index, (K) nodes[i].key, (V) nodes[i].value, newNodes);
         }
         nodes = newNodes;
     }
 
-    public void remove(T key) {
+    public void remove(K key) {
         int index = getIndex(key);
         Node current = nodes[index];
         Node prev = null;
@@ -81,7 +81,7 @@ public class MyHashMap<T> {
         return size;
     }
 
-    public Object get(T key) {
+    public Object get(K key) {
         int index = getIndex(key);
         Node cerent = nodes[index];
 
@@ -94,12 +94,12 @@ public class MyHashMap<T> {
         return null;
     }
 
-    private int getIndex(T key) {
+    private int getIndex(K key) {
         int heshcode = key.hashCode();
         return Math.abs(heshcode) % nodes.length;
     }
 
-    private void getAdd(int index, T key, T value, Node[] nodes1) {
+    private void getAdd(int index, K key, V value, Node[] nodes1) {
         Node newNode = new Node(key, value);
         if (nodes1[index] == null) {
             nodes1[index] = newNode;

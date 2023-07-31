@@ -11,7 +11,7 @@ System.out.print("0");
         MyLinkedList<Integer> linkedList = new MyLinkedList<>();
         MyQueue<Integer> queue = new MyQueue<>();
         MyStack<Integer> stack = new MyStack<>();
-        MyHashMap<Integer> hashMap = new MyHashMap<>();
+        MyHashMap<Integer,Integer> hashMap = new MyHashMap<>();
         Random random = new Random();
 
         for (int i = 0; i < 1000000; i++) {
