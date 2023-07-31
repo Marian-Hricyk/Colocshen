@@ -1,16 +1,16 @@
 
 
-public class MyQueue {
+public class MyQueue<T> {
     private Node head;
     private Node rear;
 
     private int size;
 
     private class Node {
-        Object data;
+        T data;
         Node next;
 
-        public Node(Object data) {
+        public Node(T data) {
             this.data = data;
             next = null;
         }
@@ -22,8 +22,8 @@ public class MyQueue {
         size = 0;
     }
 
-    public void add(Object valy) {
-        Node newNoda = new Node(valy);
+    public void add(T value) {
+        Node newNoda = new Node(value);
         if (isEmpty()) {
             head = newNoda;
             rear = newNoda;
@@ -44,7 +44,7 @@ public class MyQueue {
         return size;
     }
 
-    public Object peek() {
+    public T peek() {
         if (isEmpty()) {
             throw new IllegalStateException("Queue is empty");
         }
@@ -52,11 +52,11 @@ public class MyQueue {
 
     }
 
-    public Object poll() {
+    public T poll() {
         if (isEmpty()) {
             throw new IllegalStateException("Queue is empty");
         }
-        Object polle = head.data;
+        T polle = head.data;
         head.next = head;
         size--;
         return polle;

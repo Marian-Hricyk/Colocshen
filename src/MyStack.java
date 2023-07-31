@@ -1,12 +1,12 @@
-public class MyStack {
+public class MyStack<T> {
     private Node top;
     private int size;
 
     private class Node {
-        Object data;
+        T data;
         Node next;
 
-        public Node(Object data) {
+        public Node(T data) {
             this.data = data;
             this.next = null;
         }
@@ -17,7 +17,7 @@ public class MyStack {
         size = 0;
     }
 
-    public void push(Object value) {
+    public void push(T value) {
         Node newNode = new Node(value);
         newNode.next = top;
         top = newNode;
@@ -44,21 +44,24 @@ public class MyStack {
         size = 0;
     }
 
-    public int  size(){
+    public int size() {
         return size;
     }
-    public Object peek(){
+
+    public Object peek() {
         return top.data;
     }
-    public Object pop(){
-        if(isEmpty()){
+
+    public T pop() {
+        if (isEmpty()) {
             throw new IllegalStateException("Stack is empty. Cannot pop element.");
         }
-        Object node=top.data;
-        top.next=top;
+        T node = top.data;
+        top.next = top;
         size--;
         return node;
     }
+
     public Boolean isEmpty() {
         return top == null;
     }

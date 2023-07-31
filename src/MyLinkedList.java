@@ -1,12 +1,12 @@
-public class MyLinkedList {
+public class MyLinkedList<T> {
     private Node head;
     private int size;
 
     private class Node {
-        Object data;
+        T data;
         Node next;
 
-        public Node(Object data) {
+        public Node(T data) {
             this.data = data;
             this.next = null;
         }
@@ -17,8 +17,8 @@ public class MyLinkedList {
         size = 0;
     }
 
-    public void add(Object valy) {
-        Node newNode = new Node(valy);
+    public void add(T value) {
+        Node newNode = new Node(value);
         if (head == null) {
             head = newNode;
         } else {
@@ -57,11 +57,11 @@ public class MyLinkedList {
         return size;
     }
 
-    public Object get(int index) {
+    public T get(int index) {
         if (index < 0 || index >= size) {
             throw new IndexOutOfBoundsException("Index out of range: " + index);
         } else if (index == 0) {
-            return head;
+            return (T) head;
         } else {
             Node cler = head;
             for (int i = 0; i < index; i++) {

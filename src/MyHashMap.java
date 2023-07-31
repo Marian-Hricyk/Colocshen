@@ -1,17 +1,18 @@
-public class MyHashMap {
-    private Node[] beket;
+public class MyHashMap<T> {
+    private Node[] nodes;
     private int size;
     private static final int DEFAULT_CAPACITY = 16;
+    private static final Object NULL_CEY = new Object();
 
 
-    private class Node {
-        Object key;
-        Object valoe;
-        Node next;
+    private class Node<T> {
+        T key;
+        T value;
+        Node<T> next;
 
-        public Node(Object key, Object valoe) {
+        public Node(T key, T value) {
             this.key = key;
-            this.valoe = valoe;
+            this.value = value;
             next = null;
         }
     }
@@ -21,43 +22,45 @@ public class MyHashMap {
     }
 
     public MyHashMap(int capacity) {
-        beket = new Node[capacity];
+        nodes = new Node[capacity];
         size = 0;
     }
 
-    public void put(Object key, Object value) {
-        int index = getIndex(key);
-        Node newNode = new Node(key, value);
-        if (beket[index] == null) {
-            beket[index] = newNode;
-        } else {
-            Node creint = beket[index];
-
-            while (creint.next != null) {
-                if (creint.key.equals(key)) {
-                    creint.valoe = value;
-                    return;
-                }
-                creint = creint.next;
-            }
-            if (creint.key.equals(key)) {
-                creint.valoe = value;
-            } else {
-                creint.next = newNode;
-            }
+    public void put(T key, T value) {
+        if (key == null) {
+            key = (T) NULL_CEY;
         }
+        int index = getIndex(key);
+        getAdd(index, key, value, nodes);
         size++;
+
+
+        if (size == nodes.length) {
+            resize();
+        }
     }
 
-    public void remove(Object key) {
+    private void resize() {
+        int lengthNewNodes = nodes.length * 2;
+        Node[] newNodes = new Node[lengthNewNodes];
+        int index;
+
+        for (int i = 0; i < nodes.length; i++) {
+            index = getIndex((T) nodes[i].key);
+            getAdd(index, (T) nodes[i].key, (T) nodes[i].value, newNodes);
+        }
+        nodes = newNodes;
+    }
+
+    public void remove(T key) {
         int index = getIndex(key);
-        Node current = beket[index];
+        Node current = nodes[index];
         Node prev = null;
 
         while (current != null) {
             if (current.key.equals(key)) {
                 if (prev == null) {
-                    beket[index] = current.next;
+                    nodes[index] = current.next;
                 } else {
                     prev.next = current.next;
                 }
@@ -70,9 +73,7 @@ public class MyHashMap {
     }
 
     public void clear() {
-        for (int i = 0; i < beket.length; i++) {
-            beket[i] = null;
-        }
+        nodes = new Node[DEFAULT_CAPACITY];
         size = 0;
     }
 
@@ -80,21 +81,43 @@ public class MyHashMap {
         return size;
     }
 
-    public Object get(Object key) {
+    public Object get(T key) {
         int index = getIndex(key);
-        Node cerent = beket[index];
+        Node cerent = nodes[index];
 
         while (cerent != null) {
             if (cerent.key.equals(key)) {
-                return cerent.valoe;
+                return cerent.value;
             }
             cerent = cerent.next;
         }
         return null;
     }
 
-    private int getIndex(Object key) {
+    private int getIndex(T key) {
         int heshcode = key.hashCode();
-        return Math.abs(heshcode) % beket.length;
+        return Math.abs(heshcode) % nodes.length;
+    }
+
+    private void getAdd(int index, T key, T value, Node[] nodes1) {
+        Node newNode = new Node(key, value);
+        if (nodes1[index] == null) {
+            nodes1[index] = newNode;
+        } else {
+            Node creint = nodes1[index];
+
+            while (creint.next != null) {
+                if (creint.key.equals(key)) {
+                    creint.value = value;
+                    return;
+                }
+                creint = creint.next;
+            }
+            if (creint.key.equals(key)) {
+                creint.value = value;
+            } else {
+                creint.next = newNode;
+            }
+        }
     }
 }

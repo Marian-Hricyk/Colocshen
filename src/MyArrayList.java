@@ -1,38 +1,42 @@
-import java.util.Arrays;
-
-class MyArrayList {
-    private Object[] err;
+class MyArrayList<T> {
+    private Object[] elements;
     private int size;
 
 
-    private static final int capacity = 10;
+    private static final int CAPACITY = 10;
 
     public MyArrayList() {
-        err = new Object[capacity];
+        elements = new Object[CAPACITY];
         size = 0;
     }
 
-    public void add(Object value) {
-        ensureCapacity(size + 1);
-        err[size++] = value;
+    public void add(T value) {
+        if (size == elements.length) {
+            int newCpacity = elements.length * 2;
+            Object[] newErr = new Object[newCpacity];
+            for (int i = 0; i < elements.length; i++) {
+                newErr[i] = elements[i];
+            }
+            elements = newErr;
+        }
+        elements[size] = value;
+        size++;
     }
 
     public void remove(int index) {
-        if (index < 0 || index >= size) {
-            throw new IndexOutOfBoundsException("Index out of range: " + index);
-        }
+        exception(index);
 
         for (int i = index; i < size - 1; i++) {
-            err[i] = err[i + 1];
+            elements[i] = elements[i + 1];
         }
-        err[size - 1] = null;
+        elements[size - 1] = null;
         size--;
     }
 
     public void clear() {
-        for (int i = 0; i <= size; i++) {
-            err[i] = null;
-        }
+
+        elements = null;
+
         size = 0;
     }
 
@@ -40,22 +44,17 @@ class MyArrayList {
         return size;
     }
 
-    public Object get(int index) {
-        if (index < 0 || index >= size) {
-            throw new IndexOutOfBoundsException("Index out of range: " + index);
-        }
-        return err[index];
+    public T get(int index) {
+        exception(index);
+        return (T) elements[index];
     }
 
-    private void ensureCapacity(int minCapacity) {
-        int oldCapacity = err.length;
-        if (minCapacity > oldCapacity) {
-            int newCapacity = oldCapacity + (oldCapacity >> 1); // Increase capacity by 50%
-            if (newCapacity < minCapacity) {
-                newCapacity = minCapacity;
-            }
-            err = Arrays.copyOf(err, newCapacity);
+
+    private Exception exception(int index) {
+        if (index < 0 || index >= size) {
+            return new IndexOutOfBoundsException("Index out of range: " + index);
         }
+        return null;
     }
 
 }
